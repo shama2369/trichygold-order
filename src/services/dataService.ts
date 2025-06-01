@@ -30,7 +30,7 @@ export const dataService = {
 
   // Get all employee statistics
   getEmployeeStats: () => {
-    const stats = orders.reduce((acc, order) => {
+    const stats = orders.reduce((acc: Record<string, { name: string; items: Record<string, number> }>, order) => {
       if (!acc[order.employeeId]) {
         acc[order.employeeId] = {
           name: order.employeeName,
@@ -44,12 +44,18 @@ export const dataService = {
         }
       }
       
-      Object.entries(order.items).forEach(([item, quantity]) => {
-        acc[order.employeeId].items[item as keyof typeof acc[order.employeeId].items] += quantity
-      })
+      if (order.items && typeof order.items === 'object') {
+        Object.entries(order.items).forEach(([item, quantity]) => {
+          if (acc[order.employeeId].items.hasOwnProperty(item)) {
+            acc[order.employeeId].items[item as keyof typeof acc[order.employeeId].items] += quantity
+          } else {
+            console.warn(`Unexpected item name in order ${order._id}: ${item}`)
+          }
+        })
+      }
       
       return acc
-    }, {} as Record<string, { name: string; items: Record<string, number> }>)
+    }, {})
 
     return stats
   },
