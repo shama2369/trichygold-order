@@ -12,12 +12,14 @@
     "dev:frontend": "vite",
     "build:frontend": "tsc && vite build",
     "preview": "vite preview",
-    "seed": "ts-node src/scripts/seed.ts"
+    "seed": "ts-node src/scripts/seed.ts",
+    "start:frontend": "serve dist -s"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "serve": "^14.2.1",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.10",

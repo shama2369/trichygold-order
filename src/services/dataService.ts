@@ -1,4 +1,4 @@
-import { Order } from '../types'
+import { Order } from '../types/order'
 
 // In-memory storage for orders
 let orders: Order[] = []
@@ -45,9 +45,11 @@ export const dataService = {
       }
       
       if (order.items && typeof order.items === 'object') {
-        Object.entries(order.items).forEach(([item, quantity]) => {
+        Object.entries(order.items).forEach(([item, quantity = 0]) => {
           if (acc[order.employeeId].items.hasOwnProperty(item)) {
-            acc[order.employeeId].items[item as keyof typeof acc[order.employeeId].items] += quantity
+            if (typeof item === 'string' && item in acc[order.employeeId].items) {
+              acc[order.employeeId].items[item] += quantity
+            }
           } else {
             console.warn(`Unexpected item name in order ${order._id}: ${item}`)
           }
