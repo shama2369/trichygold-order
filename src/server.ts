@@ -45,7 +45,7 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   });
 });
 
-// Health check endpoint - must be before catch-all route
+// Health check endpoint - must be first
 app.get('/health', (req, res) => {
   res.status(200).json({ 
     status: 'ok', 
@@ -104,57 +104,20 @@ const startServer = async () => {
 
     console.log('Attempting to connect to MongoDB...');
     await mongoose.connect(MONGODB_URI, {
-      dbName: 'trichygold-order' // Explicitly set database name
+      dbName: 'trichygold-order'
     });
     console.log('Connected to MongoDB successfully');
-    console.log('Using database:', mongoose.connection.name); // Log the database name
 
-    // Find an available port
-    const startPort = parseInt(process.env.PORT || '5000');
-    const port = await findAvailablePort(startPort);
+    const port = parseInt(process.env.PORT || '5000', 10);
     
     // Start server
-    const server = app.listen(port, () => {
+    app.listen(port, '0.0.0.0', () => {
       console.log(`Server is running on port ${port}`);
-      console.log('Available routes:');
-      console.log('- POST /api/auth/login');
-      console.log('- POST /api/auth/register');
-      console.log('- GET /api/orders');
-      console.log('- POST /api/orders');
-    });
-
-    // Handle server errors
-    server.on('error', (err: any) => {
-      console.error('Server error:', {
-        message: err.message,
-        code: err.code,
-        stack: err.stack
-      });
-    });
-
-    // Handle server shutdown
-    process.on('SIGTERM', () => {
-      console.log('SIGTERM received. Shutting down gracefully...');
-      server.close(() => {
-        console.log('Server closed');
-        process.exit(0);
-      });
-    });
-
-    process.on('SIGINT', () => {
-      console.log('SIGINT received. Shutting down gracefully...');
-      server.close(() => {
-        console.log('Server closed');
-        process.exit(0);
-      });
+      console.log('Health check available at /health');
     });
 
   } catch (error: any) {
-    console.error('Startup error:', {
-      message: error.message,
-      stack: error.stack,
-      name: error.name
-    });
+    console.error('Startup error:', error);
     process.exit(1);
   }
 };
