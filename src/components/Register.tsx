@@ -43,8 +43,8 @@ export default function Register() {
 
   return (
     <Container maxWidth="sm">
-      <Box sx={{ mt: 4 }}>
-        <Paper elevation={3} sx={{ p: 4 }}>
+      <Box sx={{ mt: { xs: 2, sm: 4 } }}>
+        <Paper elevation={3} sx={{ p: { xs: 2, sm: 4 } }}>
           <Typography variant="h5" component="h2" gutterBottom align="center">
             Register New Employee
           </Typography>
