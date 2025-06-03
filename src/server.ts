@@ -45,14 +45,21 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   });
 });
 
+// Health check endpoint - must be before catch-all route
+app.get('/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
+
+// Serve static files from the dist directory
+app.use(express.static(path.join(__dirname, '../dist')));
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
 
 // Catch-all for unmatched routes
 app.use((req, res, next) => {
