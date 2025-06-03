@@ -2,7 +2,12 @@ import axios from 'axios';
 // Removed import { Employee } from '../models/Employee';
 // Removed import { dataService } from './dataService';
 
-const API_URL = 'http://localhost:5000/api';
+// Determine API URL based on environment
+// In production, use relative URL which will work with Railway deployment
+// In development, use localhost with port
+const API_URL = process.env.NODE_ENV === 'production' 
+  ? '/api' 
+  : 'http://localhost:5000/api';
 
 const api = axios.create({
   baseURL: API_URL,
