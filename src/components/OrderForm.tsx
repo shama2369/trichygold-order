@@ -74,14 +74,17 @@ export default function OrderForm({ onAddOrder, employeeName }: OrderFormProps) 
     setError('')
 
     try {
+      // Convert items to the format expected by the backend
+      const formattedItems = Object.entries(items)
+        .filter(([_, quantity]) => quantity > 0)
+        .reduce((acc, [name, quantity]) => ({
+          ...acc,
+          [name]: quantity
+        }), {});
+
       // Construct order data with items and selected shop
       const orderData = {
-        items: Object.entries(items)
-          .filter(([_, quantity]) => quantity > 0)
-          .map(([name, quantity]) => ({
-            name,
-            quantity,
-          })),
+        items: formattedItems,
         shop: selectedRestaurant,
       }
 
