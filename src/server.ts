@@ -50,14 +50,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
 
 // Serve static files from the dist directory
-app.use((req, res, next) => {
-  // If the request path starts with /api, skip serving static files
-  if (req.path.startsWith('/api')) {
-    return next();
-  }
-  // Otherwise, let express.static try to serve the file
-  express.static(path.join(__dirname, '../dist'))(req, res, next);
-});
+app.use('/', express.static(path.join(__dirname, '../dist')));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
