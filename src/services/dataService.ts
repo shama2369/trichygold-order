@@ -1,4 +1,4 @@
-import { Order } from '../types'
+import { Order, ItemType } from '../types'
 
 // In-memory storage for orders
 let orders: Order[] = []
@@ -45,12 +45,8 @@ export const dataService = {
       }
       
       Object.entries(order.items).forEach(([item, quantity]) => {
-        // Assert 'item' as a string key for the items object
-        const itemName: string = item;
-        // Ensure itemName is a valid key before accessing (optional but safer)
-        // if (acc[order.employeeId].items.hasOwnProperty(itemName)) {
-          acc[order.employeeId].items[itemName] += quantity;
-        // }
+        // Assert the item string as ItemType when accessing the items object
+        acc[order.employeeId].items[item as ItemType] += quantity;
       })
       
       return acc
