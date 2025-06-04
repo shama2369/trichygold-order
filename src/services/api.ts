@@ -2,7 +2,7 @@ import axios from 'axios';
 // Removed import { Employee } from '../models/Employee';
 
 // Use relative URL instead of hardcoded URL - works in any environment
-const API_URL = '/api'; // Always use relative path for Railway deployment (frontend and backend served together)
+const API_URL = '/api'; // Use relative path for Railway deployment
 // const API_URL = 'https://trichygold-order-panel-production.up.railway.app/api';
 
 const api = axios.create({
