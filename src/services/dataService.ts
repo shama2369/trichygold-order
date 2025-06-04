@@ -1,4 +1,4 @@
-import { Order } from '../types'
+import { Order, ItemType } from '../types'
 
 // In-memory storage for orders
 let orders: Order[] = []
@@ -33,23 +33,30 @@ export const dataService = {
     const stats = orders.reduce((acc, order) => {
       if (!acc[order.employeeId]) {
         acc[order.employeeId] = {
-          name: order.employeeName,
+          name: order.createdBy,
           items: {
-            tea: 0,
-            coffee: 0,
-            freshJuice: 0,
-            tinJuice: 0,
-            sandwich: 0,
+            'Karak Tea': 0,
+            'Milk Tea': 0,
+            'Coffee': 0,
+            'Rani': 0,
+            'Soft Drinks': 0,
+            'Fresh Juice': 0,
+            'Sandwich': 0,
+            'Shawarma': 0
           },
         }
       }
       
-      Object.entries(order.items).forEach(([item, quantity]) => {
-        acc[order.employeeId].items[item as keyof typeof acc[order.employeeId].items] += quantity
-      })
+      if (order.items) {
+        Object.entries(order.items).forEach(([item, quantity]) => {
+          if (item in acc[order.employeeId].items) {
+            acc[order.employeeId].items[item as ItemType] += quantity
+          }
+        })
+      }
       
       return acc
-    }, {} as Record<string, { name: string; items: Record<string, number> }>)
+    }, {} as Record<string, { name: string; items: Record<ItemType, number> }>)
 
     return stats
   },
