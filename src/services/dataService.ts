@@ -45,7 +45,12 @@ export const dataService = {
       }
       
       Object.entries(order.items).forEach(([item, quantity]) => {
-        acc[order.employeeId].items[item as keyof typeof acc[order.employeeId].items] += quantity
+        // Assert 'item' as a string key for the items object
+        const itemName: string = item;
+        // Ensure itemName is a valid key before accessing (optional but safer)
+        // if (acc[order.employeeId].items.hasOwnProperty(itemName)) {
+          acc[order.employeeId].items[itemName] += quantity;
+        // }
       })
       
       return acc

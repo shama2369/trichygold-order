@@ -6,7 +6,9 @@ export interface Order {
   customerName: string;
   amount: number;
   description: string;
+  employeeId: string;
   employeeName: string;
+  items: Record<ItemType, number>;
   status: 'pending' | 'completed' | 'cancelled';
   createdAt: string;
 }
