@@ -45,9 +45,7 @@ export const dataService = {
       }
       
       Object.entries(order.items).forEach(([item, quantity]) => {
-        if (typeof quantity === 'number') {
-          acc[order.employeeId].items[item] = (acc[order.employeeId].items[item] || 0) + quantity;
-        }
+        acc[order.employeeId].items[item as keyof typeof acc[order.employeeId].items] += quantity
       })
       
       return acc
