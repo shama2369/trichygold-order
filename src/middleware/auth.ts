@@ -17,7 +17,9 @@ export const auth = async (req: AuthenticatedRequest, res: Response, next: NextF
     }
 
     if (!process.env.JWT_SECRET) {
-      throw new Error('JWT_SECRET is not defined');
+      // Use the same default secret as in auth.ts
+      process.env.JWT_SECRET = 'trichygold-dev-temporary-secret-key';
+      console.warn('Auth middleware: Using default JWT_SECRET - this is not secure for production');
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;

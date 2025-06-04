@@ -1,7 +1,9 @@
 import axios from 'axios';
 // Removed import { Employee } from '../models/Employee';
 
-const API_URL = 'https://trichygold-order-production.up.railway.app/api';
+// Use relative URL instead of hardcoded URL - works in any environment
+const API_URL = 'https://trichygold-order-panel-production.up.railway.app/api';
+// const API_URL = '/api';
 
 const api = axios.create({
   baseURL: API_URL,

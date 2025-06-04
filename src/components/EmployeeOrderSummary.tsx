@@ -97,7 +97,7 @@ export default function EmployeeOrderSummary() {
   };
 
   return (
-    <Box sx={{ p: { xs: 1, sm: 2 } }}>
+    <Box>
       <Typography variant="h6" gutterBottom>Select Criteria</Typography>
       <Grid container spacing={2} alignItems="center">
         <Grid item xs={12} sm={3}>

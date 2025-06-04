@@ -53,8 +53,8 @@ export default function Login() {
 
   return (
     <Container maxWidth="sm">
-      <Box sx={{ mt: { xs: 4, sm: 8 } }}>
-        <Paper elevation={3} sx={{ p: { xs: 2, sm: 4 } }}>
+      <Box sx={{ mt: 8 }}>
+        <Paper elevation={3} sx={{ p: 4 }}>
           <Typography variant="h4" component="h1" gutterBottom align="center">
             Trichy Gold
           </Typography>

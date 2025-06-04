@@ -128,7 +128,7 @@ export default function OrdersDashboard() {
   return (
     <Container maxWidth="lg">
       <Box sx={{ mt: 4, mb: 4 }}>
-        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, mb: 3 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
           <Typography variant="h4" component="h1">
             Orders Dashboard
           </Typography>
@@ -137,7 +137,7 @@ export default function OrdersDashboard() {
               variant="contained"
               color="primary"
               onClick={() => setShowOrderForm(!showOrderForm)}
-              sx={{ mr: { sm: 2 }, mb: { xs: 1, sm: 0 }, width: { xs: '100%', sm: 'auto'} }}
+              sx={{ mr: 2 }}
             >
               {showOrderForm ? 'Hide Form' : 'Create New Order'}
             </Button>
@@ -145,7 +145,6 @@ export default function OrdersDashboard() {
               variant="outlined"
               color="secondary"
               onClick={handleLogout}
-              sx={{ width: { xs: '100%', sm: 'auto'} }}
             >
               Logout
             </Button>
