@@ -54,20 +54,26 @@ export default function OrdersDashboard() {
           // If it's a single object, put it in an array
           ordersArray = [data];
         } else {
-           console.warn('OrdersDashboard: Unexpected data format from API', data);
-           setError('Received unexpected data format from server.');
+          console.warn('OrdersDashboard: Unexpected data format from API', data);
+          setError('Received unexpected data format from server.');
         }
       }
 
       console.log('OrdersDashboard: Processed orders array:', ordersArray);
 
-      // Now you can safely call filter or other array methods on ordersArray
-      // This line was likely causing the error:
-      // const currentMonthOrders = data.filter(...);
-      
-      // Assuming the rest of the logic uses this processed array:
-      setOrders(ordersArray);
-      // ... rest of the success logic ...
+      // Filter orders for the current month and year
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth() + 1;
+      const currentYear = currentDate.getFullYear();
+
+      const filteredOrders = ordersArray.filter(order => {
+        const orderDate = new Date(order.createdAt);
+        return orderDate.getMonth() + 1 === currentMonth && 
+               orderDate.getFullYear() === currentYear;
+      });
+
+      console.log('OrdersDashboard: Filtered orders for current month:', filteredOrders);
+      setOrders(filteredOrders);
 
     } catch (err: any) {
       console.error('OrdersDashboard: Error fetching orders:', err);
@@ -103,13 +109,17 @@ export default function OrdersDashboard() {
   };
 
   const getItemCounts = (orders: Order[]) => {
+    console.log('OrdersDashboard: Processing orders for item counts:', orders);
+    
     const countsByShop: Record<string, Record<string, number>> = {
       restaurant1: {},
       restaurant2: {}
     };
 
     orders.forEach(order => {
+      console.log('OrdersDashboard: Processing order:', order);
       const shop = order.shop || 'restaurant1'; // Default to restaurant1 if shop is missing
+      console.log('OrdersDashboard: Order shop:', shop);
       
       // Initialize item counts for this shop if not already done
       if (!countsByShop[shop]) {
@@ -118,6 +128,7 @@ export default function OrdersDashboard() {
 
       // Process items for this order
       if (order.items) {
+        console.log('OrdersDashboard: Processing items for order:', order.items);
         Object.entries(order.items).forEach(([itemName, quantity]) => {
           countsByShop[shop][itemName] = (countsByShop[shop][itemName] || 0) + quantity;
         });
@@ -131,6 +142,7 @@ export default function OrdersDashboard() {
       }
     });
 
+    console.log('OrdersDashboard: Final counts by shop:', countsByShop);
     return countsByShop;
   };
 

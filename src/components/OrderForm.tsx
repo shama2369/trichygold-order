@@ -74,13 +74,17 @@ export default function OrderForm({ onAddOrder, employeeName }: OrderFormProps) 
     setError('')
 
     try {
-      // Convert items to the array format expected by the backend
+      // Convert items to array format expected by the backend
       const itemsArray = Object.entries(items)
         .filter(([_, quantity]) => quantity > 0)
         .map(([name, quantity]) => ({
           name,
           quantity
         }));
+
+      if (itemsArray.length === 0) {
+        throw new Error('Please select at least one item');
+      }
 
       // Construct order data with items and selected shop
       const orderData = {
@@ -103,7 +107,7 @@ export default function OrderForm({ onAddOrder, employeeName }: OrderFormProps) 
 
     } catch (err: any) {
       console.error('Error creating order:', err)
-      setError(err.response?.data?.message || 'Failed to create order')
+      setError(err.response?.data?.message || err.message || 'Failed to create order')
     } finally {
       setLoading(false)
     }
