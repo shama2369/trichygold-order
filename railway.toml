@@ -1,0 +1,20 @@
+# Railway deployment configuration for unified React + Express app
+[build]
+# Build both frontend and backend
+command = "npm run build:all"
+
+[start]
+# Start the backend, which will serve the frontend static files
+command = "npm start"
+
+[deploy]
+# Health check endpoint
+healthcheck_path = "/health"
+healthcheck_timeout = 600
+healthcheck_interval = 10
+
+[env]
+# Set these in the Railway dashboard, not here
+# MONGO_URI = "..."
+# JWT_SECRET = "..."
+# PORT = "5000"
