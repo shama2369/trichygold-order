@@ -50,7 +50,6 @@ export default function OrderForm({ onAddOrder, employeeName }: OrderFormProps) 
       [item]: 0
     }), {})
   )
-  const [shop, setShop] = useState('restaurant1')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [selectedRestaurant, setSelectedRestaurant] = useState('restaurant1')
@@ -83,7 +82,7 @@ export default function OrderForm({ onAddOrder, employeeName }: OrderFormProps) 
             name,
             quantity,
           })),
-        shop,
+        shop: selectedRestaurant,
       }
 
       console.log('OrderForm: Submitting order data:', orderData)
@@ -97,7 +96,7 @@ export default function OrderForm({ onAddOrder, employeeName }: OrderFormProps) 
           [item]: 0
         }), {})
       )
-      setShop('restaurant1')
+      setSelectedRestaurant('restaurant1')
 
     } catch (err: any) {
       console.error('Error creating order:', err)
