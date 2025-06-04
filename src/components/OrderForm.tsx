@@ -74,17 +74,17 @@ export default function OrderForm({ onAddOrder, employeeName }: OrderFormProps) 
     setError('')
 
     try {
-      // Convert items to the format expected by the backend
-      const formattedItems = Object.entries(items)
+      // Convert items to the array format expected by the backend
+      const itemsArray = Object.entries(items)
         .filter(([_, quantity]) => quantity > 0)
-        .reduce((acc, [name, quantity]) => ({
-          ...acc,
-          [name]: quantity
-        }), {});
+        .map(([name, quantity]) => ({
+          name,
+          quantity
+        }));
 
       // Construct order data with items and selected shop
       const orderData = {
-        items: formattedItems,
+        items: itemsArray,
         shop: selectedRestaurant,
       }
 
