@@ -66,8 +66,9 @@ app.get('/health', (req, res) => {
 
 // Catch-all for unmatched routes
 app.use((req, res, next) => {
-  console.warn(`${new Date().toISOString()} - 404 Not Found for: ${req.method} ${req.url}`);
-  res.status(404).json({ message: 'Not Found - This route does not exist.' });
+  // If no API route, health check, or static file was matched, serve the index.html file
+  console.warn(`${new Date().toISOString()} - Serving index.html for unmatched route: ${req.method} ${req.url}`);
+  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 });
 
 // Function to check if port is in use
