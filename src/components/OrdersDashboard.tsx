@@ -103,21 +103,34 @@ export default function OrdersDashboard() {
   };
 
   const getItemCounts = (orders: Order[]) => {
-    const countsByShop: Record<string, Record<string, number>> = {};
+    const countsByShop: Record<string, Record<string, number>> = {
+      restaurant1: {},
+      restaurant2: {}
+    };
 
     orders.forEach(order => {
       const shop = order.shop || 'restaurant1'; // Default to restaurant1 if shop is missing
       
+      // Initialize item counts for this shop if not already done
       if (!countsByShop[shop]) {
         countsByShop[shop] = {};
       }
 
-      for (const itemName in order.items) {
-        if (order.items.hasOwnProperty(itemName)) {
-          countsByShop[shop][itemName] = (countsByShop[shop][itemName] || 0) + order.items[itemName];
-        }
+      // Process items for this order
+      if (order.items) {
+        Object.entries(order.items).forEach(([itemName, quantity]) => {
+          countsByShop[shop][itemName] = (countsByShop[shop][itemName] || 0) + quantity;
+        });
       }
     });
+
+    // Remove empty shops
+    Object.keys(countsByShop).forEach(shop => {
+      if (Object.keys(countsByShop[shop]).length === 0) {
+        delete countsByShop[shop];
+      }
+    });
+
     return countsByShop;
   };
 
