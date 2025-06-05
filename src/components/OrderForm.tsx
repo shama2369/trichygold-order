@@ -125,8 +125,9 @@ export default function OrderForm({ onAddOrder, employeeName }: OrderFormProps) 
         <Grid container spacing={2} sx={{ mb: 2 }}>
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
-              <InputLabel>Restaurant</InputLabel>
+              <InputLabel id="restaurant-select-label">Restaurant</InputLabel>
               <Select
+                labelId="restaurant-select-label"
                 value={selectedRestaurant}
                 label="Restaurant"
                 onChange={(e) => setSelectedRestaurant(e.target.value)}

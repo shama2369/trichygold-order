@@ -82,9 +82,15 @@ export const authService = {
 export const orderService = {
   getOrders: async () => {
     console.log('API: Getting orders')
-    const response = await api.get('/orders');
-    console.log('API: Got orders response:', response.data)
-    return response.data;
+    try {
+      const response = await api.get('/orders');
+      console.log('API: Raw response:', response);
+      console.log('API: Response data:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('API: Error getting orders:', error);
+      throw error;
+    }
   },
 
   getOrder: async (id: string) => {

@@ -43,14 +43,16 @@ export default function OrdersDashboard() {
     setError('');
     try {
       const data = await orderService.getOrders();
-      console.log('OrdersDashboard: Fetched orders:', data);
+      console.log('OrdersDashboard: Raw data from API:', data);
 
       let ordersArray: Order[] = [];
       if (data) {
         // Check if the data is a single object (for employee view) or an array (potentially for admin view)
         if (Array.isArray(data)) {
+          console.log('OrdersDashboard: Data is an array');
           ordersArray = data;
         } else if (typeof data === 'object') {
+          console.log('OrdersDashboard: Data is a single object');
           // If it's a single object, put it in an array
           ordersArray = [data];
         } else {
@@ -66,10 +68,14 @@ export default function OrdersDashboard() {
       const currentMonth = currentDate.getMonth() + 1;
       const currentYear = currentDate.getFullYear();
 
+      console.log('OrdersDashboard: Filtering orders for month:', currentMonth, 'year:', currentYear);
+
       const filteredOrders = ordersArray.filter(order => {
         const orderDate = new Date(order.createdAt);
-        return orderDate.getMonth() + 1 === currentMonth && 
-               orderDate.getFullYear() === currentYear;
+        const isCurrentMonth = orderDate.getMonth() + 1 === currentMonth;
+        const isCurrentYear = orderDate.getFullYear() === currentYear;
+        console.log('OrdersDashboard: Order date:', orderDate, 'isCurrentMonth:', isCurrentMonth, 'isCurrentYear:', isCurrentYear);
+        return isCurrentMonth && isCurrentYear;
       });
 
       console.log('OrdersDashboard: Filtered orders for current month:', filteredOrders);
@@ -127,20 +133,19 @@ export default function OrdersDashboard() {
       }
 
       // Process items for this order
-      if (order.items) {
+      if (order.items && Array.isArray(order.items)) {
         console.log('OrdersDashboard: Processing items for order:', order.items);
-        Object.entries(order.items).forEach(([itemName, quantity]) => {
-          countsByShop[shop][itemName] = (countsByShop[shop][itemName] || 0) + quantity;
+        order.items.forEach(item => {
+          if (item.name && typeof item.quantity === 'number') {
+            countsByShop[shop][item.name] = (countsByShop[shop][item.name] || 0) + item.quantity;
+          }
         });
       }
     });
 
-    // Remove empty shops
-    Object.keys(countsByShop).forEach(shop => {
-      if (Object.keys(countsByShop[shop]).length === 0) {
-        delete countsByShop[shop];
-      }
-    });
+    // Always keep both restaurants in the counts
+    if (!countsByShop.restaurant1) countsByShop.restaurant1 = {};
+    if (!countsByShop.restaurant2) countsByShop.restaurant2 = {};
 
     console.log('OrdersDashboard: Final counts by shop:', countsByShop);
     return countsByShop;
@@ -200,7 +205,7 @@ export default function OrdersDashboard() {
                       : `Restaurant 2 Summary (outside Mall)`} 
                     - {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
                   </Typography>
-                  {Object.entries(itemCounts).length === 0 ? (
+                  {Object.keys(itemCounts).length === 0 ? (
                     <Typography>No orders placed for this restaurant this month.</Typography>
                   ) : (
                     <Grid container spacing={2}>
